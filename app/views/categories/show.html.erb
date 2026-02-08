@@ -2,6 +2,21 @@
 
 <%= render @category %>
 
+<h2>Товары в категории</h2>
+
+<% if @category.products.any? %>
+  <ul>
+    <% @category.products.each do |product| %>
+      <li>
+        <%= link_to product.name, product_path(product) %>
+        — <%= number_to_currency(product.price) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>В этой категории пока нет товаров.</p>
+<% end %>
+
 <div>
   <%= link_to "Edit this category", edit_category_path(@category) %> |
   <%= link_to "Back to categories", categories_path %>
