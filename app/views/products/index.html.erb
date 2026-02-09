@@ -1,16 +1,16 @@
 <p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Products" %>
+<% content_for :title, "Товары" %>
 
-<h1>Products</h1>
+<h1>Товары</h1>
 
 <div id="products">
   <% @products.each do |product| %>
     <%= render product %>
     <p>
-      <%= link_to "Show this product", product %>
+      <%= link_to "Открыть этот товар", product %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New product", new_product_path %>
+<%= link_to "Новый товар", new_product_path %>

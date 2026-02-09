@@ -1,12 +1,11 @@
-<% content_for :title, "Editing category" %>
+<% content_for :title, "Изменение категории" %>
 
-<h1>Editing category</h1>
+<h1>Изменение категории</h1>
 
 <%= render "form", category: @category %>
 
 <br>
 
 <div>
-  <%= link_to "Show this category", @category %> |
-  <%= link_to "Back to categories", categories_path %>
+  <%= link_to "Назад к списку категорий", categories_path %>
 </div>

@@ -2,6 +2,10 @@
 
 <%= render @category %>
 
+<%= link_to "Добавить товар в эту категорию",
+            new_product_path(category_id: @category.id),
+            class: "button" %>
+
 <h2>Товары в категории</h2>
 
 <% if @category.products.any? %>
@@ -18,8 +22,8 @@
 <% end %>
 
 <div>
-  <%= link_to "Edit this category", edit_category_path(@category) %> |
-  <%= link_to "Back to categories", categories_path %>
+  <%= link_to "Изменить эту категорию", edit_category_path(@category) %> |
+  <%= link_to "Назад к списку категорий", categories_path %>
 
-  <%= button_to "Destroy this category", @category, method: :delete %>
+  <%= button_to "Удалить эту категорию", @category, method: :delete %>
 </div>
