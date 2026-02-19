@@ -4,8 +4,10 @@ class StudentsClient
   def self.exists?(student_id)
     response = Faraday.get("#{BASE_URL}/students")
     students = JSON.parse(response.body)
-    students.any? { |s| s["id"] == student_id }
-  rescue
+
+    students.any? { |s| s["id"].to_i == student_id.to_i }
+  rescue StandardError => e
+    Rails.logger.error("Students service error: #{e.message}")
     false
   end
 end

@@ -1,0 +1,79 @@
+version: "3.9"
+
+services:
+  students-service:
+    build: ./students-service
+    command: bash -c "bin/rails db:create db:migrate && bin/rails server -b 0.0.0.0"
+    volumes:
+      - ./students-service:/app:cached
+    ports:
+      - "3001:3000"
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: students_development
+    depends_on:
+      - postgres
+    networks:
+      Krivonozhko:
+        ipv4_address: 10.20.2.10
+
+  attendance-service:
+    build: ./attendance-service
+    command: bash -c "bin/rails db:create db:migrate && bin/rails server -b 0.0.0.0"
+    volumes:
+      - ./attendance-service:/app:cached
+    ports:
+      - "3002:3000"
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: attendance_development
+      STUDENTS_SERVICE_URL: http://students-service:3000
+    depends_on:
+      - postgres
+      - students-service
+    networks:
+      Krivonozhko:
+        ipv4_address: 10.20.2.11
+
+  reports-service:
+    build: ./reports-service
+    command: bin/rails server -b 0.0.0.0
+    volumes:
+      - ./reports-service:/app:cached
+    ports:
+      - "3003:3000"
+    environment:
+      STUDENTS_SERVICE_URL: http://students-service:3000
+      ATTENDANCE_SERVICE_URL: http://attendance-service:3000
+    depends_on:
+      - students-service
+      - attendance-service
+    networks:
+      Krivonozhko:
+        ipv4_address: 10.20.2.12
+
+  postgres:
+    image: postgres:16.1
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      Krivonozhko:
+        ipv4_address: 10.20.2.13
+
+volumes:
+  postgres-data:
+
+networks:
+  Krivonozhko:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.20.2.0/24
