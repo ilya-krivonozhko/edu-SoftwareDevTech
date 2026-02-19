@@ -4,6 +4,10 @@ class AttendancesController < ApplicationController
   end
 
   def create
+    unless StudentsClient.exists?(attendance_params[:student_id])
+      return render json: { error: "Student not found" }, status: :unprocessable_entity
+    end
+
     attendance = Attendance.create!(attendance_params)
     render json: attendance, status: :created
   end
